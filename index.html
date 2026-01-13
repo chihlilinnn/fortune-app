@@ -11,12 +11,13 @@
     
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@900&display=swap" rel="stylesheet">
     <style>
+        /* 1. 設定深紅色背景 */
         body { 
             margin: 0; 
             font-family: 'Noto Sans TC', sans-serif; 
             text-align: center; 
             overflow: hidden; 
-            background-color: #800000; /* 調整為深紅色 */
+            background-color: #800000; /* 深紅色 */
         }
         .page { 
             width: 100vw; 
@@ -28,7 +29,7 @@
             flex-direction: column; 
             justify-content: center; 
             align-items: center;
-            background-color: #800000; /* 深紅色背景 */
+            background-color: #800000; /* 深紅色 */
         }
         .gif-img {
             width: 100%;
@@ -37,8 +38,9 @@
             position: absolute;
             top: 0;
             left: 0;
+            z-index: 1;
         }
-        /* 中籤文字容器優化：確保不跑版 */
+        /* 2. 中籤文字容器：精準定位與延遲感 */
         #page3-content-wrapper {
             position: absolute; 
             top: 0; 
@@ -46,34 +48,34 @@
             width: 100%; 
             height: 100%; 
             z-index: 10;
-            pointer-events: none; /* 確保不影響點擊按鈕 */
+            pointer-events: none; 
             opacity: 0; 
-            transition: opacity 0.5s; 
+            transition: opacity 0.8s ease-in; /* 讓文字浮現更柔和 */
         }
         .main-message-container {
             position: absolute;
-            top: 55%; /* 微調位置確保在圖片框內 */
+            top: 55%; /* 確保垂直居中在獎項框 */
             left: 50%;
             transform: translate(-50%, -50%); 
-            width: 85%;
+            width: 80%; /* 縮小寬度防止跑版 */
         }
         .main-message-container h2 {
-            font-size: 75px; /* 字級微縮小避免溢出 */
-            margin-bottom: 40px; 
+            font-size: 70px; /* 稍微縮小字體確保適應性 */
+            margin: 0 0 30px 0; 
             color: #FFD700;
             font-weight: 900;
-            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.6);
             line-height: 1.1;
         }
         .main-message-container p {
-            font-size: 60px; 
+            font-size: 55px; 
             margin: 0;
             line-height: 1.2;
             color: white; 
             font-weight: 700;
-            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6);
         }
-        /* 按鈕樣式修復 */
+        /* 3. 按鈕優化：隱藏原生文字防止 iOS 抓取 */
         #reset-button {
             position: absolute;
             bottom: 8dvh; 
@@ -88,24 +90,23 @@
             height: 55px;
             border: none;
             border-radius: 50px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
             cursor: pointer;
             overflow: hidden;
             display: flex;
             justify-content: center;
             align-items: center;
         }
-        /* 隱藏原生文字以防 iOS 預覽抓取 */
-        .btn-text {
-            text-indent: -9999px;
+        .btn-inner-text {
+            text-indent: -9999px; /* 隱藏真實文字 */
             white-space: nowrap;
         }
-        /* 用虛擬元素顯示文字 */
-        #reset-button::before {
-            content: "再抽一次";
+        #reset-button::after {
+            content: "再抽一次"; /* 用虛擬元素顯示文字 */
             position: absolute;
             width: 100%;
             text-align: center;
+            text-indent: 0;
         }
     </style>
 </head>
@@ -121,13 +122,15 @@
 
 <div id="page3" class="page">
     <img id="gif3" src="https://i.postimg.cc/QMRmz8Hb/zhong-qian-ye.gif" class="gif-img">
+    
     <div id="page3-content-wrapper">
         <div class="main-message-container">
             <h2 id="content-B"></h2> 
             <p id="content-C"></p> 
         </div>
     </div>
-    <button id="reset-button" onclick="resetPage()"><span class="btn-text">再抽一次</span></button>
+    
+    <button id="reset-button" onclick="resetPage()"><span class="btn-inner-text">再抽一次</span></button>
 </div>
 
 <script>
@@ -163,25 +166,30 @@
         gif3.src = 'https://i.postimg.cc/QMRmz8Hb/zhong-qian-ye.gif'; 
         page3.style.display = 'flex';
         
+        // 確保內容初始隱藏
+        contentWrapper.style.opacity = '0';
+
         if (fortuneData.length === 0) {
             try {
                 const response = await fetch('data.json');
                 fortuneData = await response.json();
             } catch (error) {
-                console.error("Error:", error);
+                console.error("Error loading JSON");
                 return;
             }
         }
         
         displayRandomFortune();
-        setTimeout(showContent, 1000); 
+        
+        // 修改：延遲 1.5 秒才顯示文字，確保背景圖先出現
+        setTimeout(showContent, 1500); 
+        // 延遲 3 秒執行定格
         setTimeout(stopGifAnimation, 3000); 
     }
 
     function goToPage2() {
         page1.style.display = 'none';
         page2.style.display = 'flex';
-        contentWrapper.style.opacity = '0'; 
         setTimeout(loadDataAndGoToPage3, 2000); 
     }
 
@@ -190,8 +198,6 @@
         page2.style.display = 'flex';
         contentWrapper.style.opacity = '0'; 
         setTimeout(loadDataAndGoToPage3, 2000); 
-        contentB.textContent = ''; 
-        contentC.textContent = ''; 
     }
 
     window.addEventListener('load', () => {

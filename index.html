@@ -4,28 +4,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>我的發財密馬</title>
+    
     <link rel="preload" as="image" href="https://i.postimg.cc/VNRsG6Gw/chou-qian-zhu-ye.gif">
-    <link rel="preload" as="image" href="https://i.postimg.cc/sf56thPL/guo-chang-ye.gif">
-    <link rel="preload" as="image" href="https://i.postimg.cc/QMRmz8Hb/zhong-qian-ye.gif">
     
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@900&display=swap" rel="stylesheet">
     <style>
-        /* 1. 解決白屏：強制全局深紅背景 */
+        /* 2. 強制深紅背景，防止白屏 */
         html, body { 
-            margin: 0; 
-            padding: 0;
-            width: 100%;
-            height: 100%;
-            background-color: #800000 !important; /* 深紅色 */
+            margin: 0; padding: 0; width: 100%; height: 100%;
+            background-color: #800000 !important; 
             font-family: 'Noto Sans TC', sans-serif; 
             overflow: hidden; 
         }
         .page { 
-            width: 100vw; 
-            height: 100dvh; 
-            position: fixed;
-            top: 0; 
-            left: 0; 
+            width: 100vw; height: 100dvh; 
+            position: fixed; top: 0; left: 0; 
             display: none; 
             background-color: #800000; 
             z-index: 5;
@@ -33,82 +26,59 @@
             justify-content: center;
             align-items: center;
         }
-        .gif-img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-        /* 2. 中籤文字：強制單行且自動縮放 */
+        .gif-img { width: 100%; height: 100%; object-fit: cover; }
+
+        /* 3. 中籤文字：縮小 10% 並移至下半部 1/2 區域 */
         #page3-content-wrapper {
-            position: absolute; 
-            top: 0; 
-            left: 0;
-            width: 100%; 
-            height: 100%; 
-            z-index: 10;
-            pointer-events: none;
-            opacity: 0; 
-            transition: opacity 0.5s; 
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            position: absolute; top: 0; left: 0;
+            width: 100%; height: 100%; 
+            z-index: 10; pointer-events: none;
+            opacity: 0; transition: opacity 0.4s ease; 
+            display: flex; justify-content: center;
         }
         .main-message-container {
+            position: absolute;
+            top: 65%; /* 移至下半部 1/2 位置 */
+            transform: translateY(-50%);
             width: 90%;
-            margin-top: 5dvh; /* 調整文字垂直位置 */
             text-align: center;
         }
         .main-message-container h2 {
-            font-size: 13vw; /* 根據螢幕寬度自動縮放字級 */
-            white-space: nowrap; /* 強制不換行 */
-            margin: 0 0 5vw 0; 
+            font-size: 11.5vw; /* 縮小約 10% */
+            white-space: nowrap; /* 絕對不換行 */
+            margin: 0 0 4vw 0; 
             color: #FFD700;
             font-weight: 900;
             text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7);
         }
         .main-message-container p {
-            font-size: 10vw; /* 根據螢幕寬度自動縮放字級 */
-            white-space: nowrap; /* 強制不換行 */
+            font-size: 9vw; /* 縮小約 10% */
+            white-space: nowrap; /* 絕對不換行 */
             margin: 0;
             color: white; 
             font-weight: 700;
             text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.7);
         }
-        /* 3. 按鈕優化 */
+
+        /* 4. 按鈕優化 */
         #reset-button {
-            position: absolute;
-            bottom: 8dvh; 
-            left: 50%;
+            position: absolute; bottom: 7dvh; left: 50%;
             transform: translateX(-50%);
-            z-index: 20;
-            background-color: #FFD700; 
-            color: #CC0000; 
-            font-weight: 900;
-            font-size: 20px;
-            width: 160px;
-            height: 55px;
-            border: none;
-            border-radius: 50px;
+            z-index: 20; background-color: #FFD700; color: #CC0000; 
+            font-weight: 900; font-size: 20px;
+            width: 150px; height: 50px;
+            border: none; border-radius: 50px;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
-            cursor: pointer;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            display: flex; justify-content: center; align-items: center;
         }
-        .btn-text-hidden {
-            text-indent: -9999px;
-            white-space: nowrap;
-        }
+        .btn-text-hide { text-indent: -9999px; white-space: nowrap; }
         #reset-button::after {
-            content: "再抽一次";
-            position: absolute;
-            width: 100%;
-            text-align: center;
-            text-indent: 0;
+            content: "再抽一次"; position: absolute; width: 100%;
+            text-align: center; text-indent: 0;
         }
     </style>
 </head>
-<body>
+<body style="background-color: #800000;">
 
 <div id="page1" class="page" style="display: flex;">
     <img id="gif1" src="https://i.postimg.cc/VNRsG6Gw/chou-qian-zhu-ye.gif" class="gif-img" onclick="goToPage2()">
@@ -126,71 +96,69 @@
             <p id="content-C"></p> 
         </div>
     </div>
-    <button id="reset-button" onclick="resetPage()"><span class="btn-text-hidden">再抽一次</span></button>
+    <button id="reset-button" onclick="resetPage()"><span class="btn-text-hide">再抽一次</span></button>
 </div>
 
 <script>
     const STATIC_IMAGE = 'https://i.postimg.cc/Bb100Qg5/zhong-qian-ding-ge.jpg';
-    const page1 = document.getElementById('page1');
-    const page2 = document.getElementById('page2');
-    const page3 = document.getElementById('page3');
-    const gif3 = document.getElementById('gif3'); 
-    const contentWrapper = document.getElementById('page3-content-wrapper'); 
-    const contentB = document.getElementById('content-B');         
-    const contentC = document.getElementById('content-C');           
-
     let fortuneData = [];
+
+    // 背景載入其他資源，不卡住首頁
+    function preloadRest() {
+        const images = [
+            'https://i.postimg.cc/sf56thPL/guo-chang-ye.gif',
+            'https://i.postimg.cc/QMRmz8Hb/zhong-qian-ye.gif',
+            STATIC_IMAGE
+        ];
+        images.forEach(src => { const img = new Image(); img.src = src; });
+    }
+
+    async function fetchData() {
+        try {
+            const res = await fetch('data.json');
+            fortuneData = await res.json();
+        } catch (e) { console.log("Data fetch pending..."); }
+    }
 
     function displayFortune() {
         if (fortuneData.length > 0) {
             const random = fortuneData[Math.floor(Math.random() * fortuneData.length)];
-            contentB.textContent = random.contentB; 
-            contentC.textContent = random.contentC; 
+            document.getElementById('content-B').textContent = random.contentB; 
+            document.getElementById('content-C').textContent = random.contentC; 
         }
     }
 
     async function loadToPage3() {
-        page2.style.display = 'none';
+        document.getElementById('page2').style.display = 'none';
+        const gif3 = document.getElementById('gif3');
         gif3.src = 'https://i.postimg.cc/QMRmz8Hb/zhong-qian-ye.gif'; 
-        page3.style.display = 'flex';
+        document.getElementById('page3').style.display = 'flex';
+        document.getElementById('page3-content-wrapper').style.opacity = '0';
 
-        if (fortuneData.length === 0) {
-            try {
-                const res = await fetch('data.json');
-                fortuneData = await res.json();
-            } catch (e) { console.error("Data fail"); }
-        }
-        
+        if (fortuneData.length === 0) await fetchData();
         displayFortune();
         
-        // 延遲 1.2 秒顯示文字
-        setTimeout(() => { contentWrapper.style.opacity = '1'; }, 1200);
-        
-        // 3秒後執行定格（預加載靜態圖防止問號）
-        setTimeout(() => { 
-            const imgCheck = new Image();
-            imgCheck.onload = () => { gif3.src = STATIC_IMAGE; };
-            imgCheck.src = STATIC_IMAGE;
-        }, 3000); 
+        // 延遲顯示文字與定格
+        setTimeout(() => { document.getElementById('page3-content-wrapper').style.opacity = '1'; }, 1300);
+        setTimeout(() => { gif3.src = STATIC_IMAGE; }, 3000); 
     }
 
     function goToPage2() {
-        page1.style.display = 'none';
-        page2.style.display = 'flex';
+        document.getElementById('page1').style.display = 'none';
+        document.getElementById('page2').style.display = 'flex';
         setTimeout(loadToPage3, 2000); 
     }
 
     function resetPage() {
-        page3.style.display = 'none';
-        contentWrapper.style.opacity = '0';
-        page2.style.display = 'flex';
+        document.getElementById('page3').style.display = 'none';
+        document.getElementById('page2').style.display = 'flex';
         setTimeout(loadToPage3, 2000); 
     }
 
     window.addEventListener('load', () => {
-        page1.style.display = 'flex';
+        fetchData();
+        preloadRest();
     });
 </script>
-
 </body>
 </html>

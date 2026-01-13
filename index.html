@@ -9,7 +9,7 @@
     
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@900&display=swap" rel="stylesheet">
     <style>
-        /* 2. 強制深紅背景，防止白屏 */
+        /* 強制深紅背景，防止白屏 */
         html, body { 
             margin: 0; padding: 0; width: 100%; height: 100%;
             background-color: #800000 !important; 
@@ -28,45 +28,45 @@
         }
         .gif-img { width: 100%; height: 100%; object-fit: cover; }
 
-        /* 3. 中籤文字：縮小 10% 並移至下半部 1/2 區域 */
+        /* 中籤文字容器：定位在 50% 處 */
         #page3-content-wrapper {
             position: absolute; top: 0; left: 0;
             width: 100%; height: 100%; 
             z-index: 10; pointer-events: none;
-            opacity: 0; transition: opacity 0.4s ease; 
+            opacity: 0; transition: opacity 0.5s ease; 
             display: flex; justify-content: center;
         }
         .main-message-container {
             position: absolute;
-            top: 65%; /* 移至下半部 1/2 位置 */
-            transform: translateY(-50%);
+            top: 50%; /* 您要求的精準定位點 */
+            transform: translateY(0); /* 從 50% 開始往下排，不需反向位移 */
             width: 90%;
             text-align: center;
         }
         .main-message-container h2 {
-            font-size: 11.5vw; /* 縮小約 10% */
-            white-space: nowrap; /* 絕對不換行 */
-            margin: 0 0 4vw 0; 
+            font-size: 10vw; 
+            white-space: nowrap; 
+            margin: 5vw 0 3vw 0; /* 增加上方間距讓它更靠下半部 */
             color: #FFD700;
             font-weight: 900;
             text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7);
         }
         .main-message-container p {
-            font-size: 9vw; /* 縮小約 10% */
-            white-space: nowrap; /* 絕對不換行 */
+            font-size: 8vw; 
+            white-space: nowrap; 
             margin: 0;
             color: white; 
             font-weight: 700;
             text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.7);
         }
 
-        /* 4. 按鈕優化 */
+        /* 按鈕樣式 */
         #reset-button {
             position: absolute; bottom: 7dvh; left: 50%;
             transform: translateX(-50%);
             z-index: 20; background-color: #FFD700; color: #CC0000; 
-            font-weight: 900; font-size: 20px;
-            width: 150px; height: 50px;
+            font-weight: 900; font-size: 18px;
+            width: 140px; height: 48px;
             border: none; border-radius: 50px;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
             display: flex; justify-content: center; align-items: center;
@@ -103,14 +103,14 @@
     const STATIC_IMAGE = 'https://i.postimg.cc/Bb100Qg5/zhong-qian-ding-ge.jpg';
     let fortuneData = [];
 
-    // 背景載入其他資源，不卡住首頁
-    function preloadRest() {
-        const images = [
+    // 背景靜默加載
+    function preloadAssets() {
+        const assets = [
             'https://i.postimg.cc/sf56thPL/guo-chang-ye.gif',
             'https://i.postimg.cc/QMRmz8Hb/zhong-qian-ye.gif',
             STATIC_IMAGE
         ];
-        images.forEach(src => { const img = new Image(); img.src = src; });
+        assets.forEach(url => { const img = new Image(); img.src = url; });
     }
 
     async function fetchData() {
@@ -138,8 +138,12 @@
         if (fortuneData.length === 0) await fetchData();
         displayFortune();
         
-        // 延遲顯示文字與定格
-        setTimeout(() => { document.getElementById('page3-content-wrapper').style.opacity = '1'; }, 1300);
+        // 延遲浮現文字
+        setTimeout(() => { 
+            document.getElementById('page3-content-wrapper').style.opacity = '1'; 
+        }, 1300);
+        
+        // 3 秒後定格
         setTimeout(() => { gif3.src = STATIC_IMAGE; }, 3000); 
     }
 
@@ -157,7 +161,7 @@
 
     window.addEventListener('load', () => {
         fetchData();
-        preloadRest();
+        preloadAssets();
     });
 </script>
 </body>

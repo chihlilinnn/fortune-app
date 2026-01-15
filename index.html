@@ -9,7 +9,6 @@
     
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@900&display=swap" rel="stylesheet">
     <style>
-        /* 全局深紅背景，消除白屏感 */
         html, body { 
             margin: 0; padding: 0; width: 100%; height: 100%;
             background-color: #800000 !important; 
@@ -28,7 +27,7 @@
         }
         .gif-img { width: 100%; height: 100%; object-fit: cover; }
 
-        /* 文字定位：Top 40% + 放大 7% (h2: 10.7vw, p: 8.6vw) */
+        /* 文字定位：Top 40% + 放大 7% */
         #page3-content-wrapper {
             position: absolute; top: 0; left: 0;
             width: 100%; height: 100%; 
@@ -59,7 +58,6 @@
             text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.7);
         }
 
-        /* 再抽一次按鈕 */
         #reset-button {
             position: absolute; bottom: 7dvh; left: 50%;
             transform: translateX(-50%);
@@ -99,6 +97,7 @@
 </div>
 
 <script>
+    // 確定的新 GIF 連結
     const IMG_URLS = {
         page1: 'https://i.postimg.cc/zGFqgDTk/gif.gif',
         page2: 'https://i.postimg.cc/pLH2r557/gif.gif',
@@ -108,17 +107,19 @@
 
     let fortuneData = [];
 
-    // 背景資源加載
+    // 背景載入資源，優先確保 page2 和 page3 的圖在快取中
     function preloadRest() {
-        const images = [IMG_URLS.page2, IMG_URLS.page3, IMG_URLS.static];
-        images.forEach(src => { const img = new Image(); img.src = src; });
+        [IMG_URLS.page2, IMG_URLS.page3, IMG_URLS.static].forEach(src => {
+            const img = new Image();
+            img.src = src;
+        });
     }
 
     async function fetchData() {
         try {
             const res = await fetch('data.json');
             fortuneData = await res.json();
-        } catch (e) { console.log("Data load pending..."); }
+        } catch (e) { console.log("Data fetch pending..."); }
     }
 
     function displayFortune() {
@@ -133,7 +134,7 @@
         document.getElementById('page2').style.display = 'none';
         const gif3 = document.getElementById('gif3');
         
-        // 1. 重設為 GIF
+        // 切換到正確的中籤頁 GIF
         gif3.src = IMG_URLS.page3;
         document.getElementById('page3').style.display = 'flex';
         document.getElementById('page3-content-wrapper').style.opacity = '0';
@@ -141,33 +142,9 @@
         if (fortuneData.length === 0) await fetchData();
         displayFortune();
         
-        // 2. 0.8秒浮現文字
+        // 文字浮現
         setTimeout(() => { 
             document.getElementById('page3-content-wrapper').style.opacity = '1'; 
         }, 800);
         
-        // 3. 3秒後定格畫面
-        setTimeout(() => { gif3.src = IMG_URLS.static; }, 3000); 
-    }
-
-    function goToPage2() {
-        document.getElementById('page1').style.display = 'none';
-        const p2 = document.getElementById('page2');
-        p2.style.display = 'flex';
-        document.getElementById('gif2').src = IMG_URLS.page2;
-        setTimeout(loadToPage3, 2000); 
-    }
-
-    function resetPage() {
-        document.getElementById('page3-content-wrapper').style.opacity = '0';
-        document.getElementById('page3').style.display = 'none';
-        goToPage2();
-    }
-
-    window.addEventListener('load', () => {
-        fetchData();
-        preloadRest();
-    });
-</script>
-</body>
-</html>
+        //

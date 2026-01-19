@@ -9,7 +9,6 @@
     
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@900&display=swap" rel="stylesheet">
     <style>
-        /* 基礎設定 */
         html, body { 
             margin: 0; padding: 0; width: 100%; height: 100%;
             background-color: #800000 !important; 
@@ -19,7 +18,7 @@
         .page { 
             width: 100vw; height: 100dvh; 
             position: fixed; top: 0; left: 0; 
-            display: none; /* 預設隱藏 */
+            display: none; 
             background-color: #800000; 
             z-index: 5;
             flex-direction: column;
@@ -28,7 +27,7 @@
         }
         .gif-img { width: 100%; height: 100%; object-fit: cover; }
 
-        /* 中籤頁文字設定：Top 40% + 放大 */
+        /* 文字設定 */
         #page3-content-wrapper {
             position: absolute; top: 0; left: 0;
             width: 100%; height: 100%; 
@@ -59,7 +58,6 @@
             text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.7);
         }
 
-        /* 按鈕設定 */
         #reset-button {
             position: absolute; bottom: 7dvh; left: 50%;
             transform: translateX(-50%);
@@ -95,28 +93,27 @@
 </div>
 
 <script>
-    // 圖片連結配置
     const IMG_URLS = {
         page2: 'https://i.postimg.cc/pLH2r557/guo-chang-ye.gif',
         page3: 'https://i.postimg.cc/vZsQTxxt/zhong-qian-ye.gif',
-        static: 'https://i.postimg.cc/Bb100Qg5/zhong-qian-ding-ge.jpg'
+        static: 'https://i.postimg.cc/Bb100Qg5/zhong-qian-ding-ge.jpg' // 用來定格的靜態圖
     };
 
     let fortuneData = [];
 
-    // 初始化：抓資料 + 設定自動跳轉
     async function initApp() {
         try {
             const res = await fetch('data.json');
             fortuneData = await res.json();
         } catch (e) { console.error("Data error"); }
 
-        // 預先偷偷下載 Page 3 的 GIF
         const preloadImg = new Image();
         preloadImg.src = IMG_URLS.page3;
+        const preloadStatic = new Image();
+        preloadStatic.src = IMG_URLS.static;
 
-        // 2.5秒後自動跳轉到中籤頁 (配合過場動畫時間)
-        setTimeout(showResultPage, 2500);
+        // 1.5 秒後跳轉到結果頁
+        setTimeout(showResultPage, 1500);
     }
 
     function showResultPage() {
@@ -125,34 +122,33 @@
         const page3 = document.getElementById('page3');
         const gif3 = document.getElementById('gif3');
         
-        // 設定並顯示中籤動畫
+        // 1. 先播放會動的 GIF
         gif3.src = IMG_URLS.page3;
         page3.style.display = 'flex';
         document.getElementById('page3-content-wrapper').style.opacity = '0';
 
-        // 抽取籤詩
         if (fortuneData.length > 0) {
             const random = fortuneData[Math.floor(Math.random() * fortuneData.length)];
             document.getElementById('content-B').textContent = random.contentB; 
             document.getElementById('content-C').textContent = random.contentC; 
         }
 
-        // 文字浮現 (0.8秒後)
+        // 0.8秒後顯示文字
         setTimeout(() => { 
             document.getElementById('page3-content-wrapper').style.opacity = '1'; 
         }, 800);
         
-        // 動畫定格 (3秒後換成靜態圖)
-        setTimeout(() => { gif3.src = IMG_URLS.static; }, 3000); 
+        // 【關鍵】3秒後切換成靜態圖 (看起來像暫停)
+        // 如果您的GIF長度不是3秒，請修改這裡的 3000
+        setTimeout(() => { 
+            gif3.src = IMG_URLS.static; 
+        }, 3000); 
     }
 
-    // 重置功能：重新載入網頁，從過場動畫開始
     function resetApp() {
-        // 簡單暴力：直接重整頁面，確保動畫從頭播放
         window.location.reload();
     }
 
-    // 網頁載入後立即執行
     window.addEventListener('load', initApp);
 </script>
 </body>

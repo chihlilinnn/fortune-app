@@ -27,7 +27,7 @@
         }
         .gif-img { width: 100%; height: 100%; object-fit: cover; }
 
-        /* 文字設定 */
+        /* 文字設定：位置微調至 45% */
         #page3-content-wrapper {
             position: absolute; top: 0; left: 0;
             width: 100%; height: 100%; 
@@ -37,7 +37,8 @@
         }
         .main-message-container {
             position: absolute;
-            top: 40%; 
+            /* 修改：從 40% 改為 45%，稍微往下移 */
+            top: 45%; 
             width: 92%;
             text-align: center;
         }
@@ -96,7 +97,7 @@
     const IMG_URLS = {
         page2: 'https://i.postimg.cc/pLH2r557/guo-chang-ye.gif',
         page3: 'https://i.postimg.cc/vZsQTxxt/zhong-qian-ye.gif',
-        static: 'https://i.postimg.cc/Bb100Qg5/zhong-qian-ding-ge.jpg' // 用來定格的靜態圖
+        static: 'https://i.postimg.cc/Bb100Qg5/zhong-qian-ding-ge.jpg'
     };
 
     let fortuneData = [];
@@ -112,8 +113,8 @@
         const preloadStatic = new Image();
         preloadStatic.src = IMG_URLS.static;
 
-        // 1.5 秒後跳轉到結果頁
-        setTimeout(showResultPage, 1500);
+        // 修改：過場動畫改為 2000毫秒 (2秒)
+        setTimeout(showResultPage, 2000);
     }
 
     function showResultPage() {
@@ -122,7 +123,7 @@
         const page3 = document.getElementById('page3');
         const gif3 = document.getElementById('gif3');
         
-        // 1. 先播放會動的 GIF
+        // 播放中籤 GIF
         gif3.src = IMG_URLS.page3;
         page3.style.display = 'flex';
         document.getElementById('page3-content-wrapper').style.opacity = '0';
@@ -133,13 +134,12 @@
             document.getElementById('content-C').textContent = random.contentC; 
         }
 
-        // 0.8秒後顯示文字
+        // 文字顯示
         setTimeout(() => { 
             document.getElementById('page3-content-wrapper').style.opacity = '1'; 
         }, 800);
         
-        // 【關鍵】3秒後切換成靜態圖 (看起來像暫停)
-        // 如果您的GIF長度不是3秒，請修改這裡的 3000
+        // 3秒後定格畫面 (如果需要更久或更短可調整這裡)
         setTimeout(() => { 
             gif3.src = IMG_URLS.static; 
         }, 3000); 
